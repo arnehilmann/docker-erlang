@@ -13,6 +13,7 @@ RUN apt-get install -y man
 RUN apt-get install -y unixodbc
 RUN apt-get install -y libssl1.0.0
 #RUN apt-get install -y libwxgtk2.8-0
+RUN apt-get install -y make
 
 # Install package and add to PATH
 ADD erlang-17.1.tar.gz /
