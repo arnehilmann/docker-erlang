@@ -1,6 +1,7 @@
 VSN = 17.1-1
-IMG_BUILD = stoo/erlang_build:$(VSN)
-IMG = stoo/erlang:$(VSN)
+IMG_BUILD = arne/erlang_build:$(VSN)
+IMG = arne/erlang:$(VSN)
+IMG_LATEST = arne/erlang:latest
 
 PREFIX = erlang-17.1
 
@@ -18,6 +19,9 @@ image/$(PREFIX).tar.gz:
 
 image: image/$(PREFIX).tar.gz
 	docker build -t "$(IMG)" image
+
+latest:	all
+	docker tag "$(IMG)" "$(IMG_LATEST)"
 
 clean:
 	rm -f image/$(PREFIX).tar.gz
