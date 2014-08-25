@@ -1,0 +1,43 @@
+#!/bin/bash
+set -u -e -E -C -o pipefail
+
+DNSMASQ_D=/etc/dnsmasq.d
+
+NR=${1:-1}
+
+NAME="node$NR"
+
+if docker inspect $NAME > /dev/null 2>&1; then
+    echo "housekeeping started"
+    echo "container $NAME already known"
+    echo -n "stopping "
+    docker stop $NAME
+    echo -n "removing "
+    if ! docker rm $NAME; then
+        echo "cannot remove container $NAME, aborting..."
+        exit 2
+    fi
+    echo "housekeeping finished"
+fi
+
+DOCKER_ID=$(docker run -d \
+    -v $(pwd):/host-wd \
+    -w /host-wd \
+    -h $NAME \
+    --name=$NAME \
+    arne/erlang \
+    ./init)
+
+IP=$(docker inspect $DOCKER_ID | sed -n '/"IPAddress"/{s/.*": "//;s/".*//;p}')
+
+for OLD_NAME in $(grep -l $NAME $DNSMASQ_D/*); do
+    rm -fv $OLD_NAME
+done
+for OLD_IP in $(grep -l $IP $DNSMASQ_D/*); do
+    rm -fv $OLD_IP
+done
+
+echo "address=/$NAME/$IP" >  $DNSMASQ_D/$NAME
+echo "remember to restart the dnsmasq service after all containers are started."
+echo "'sudo service dnsmasq restart' would do the trick."
+echo "$NAME/$IP started"
