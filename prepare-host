@@ -1,0 +1,24 @@
+#!/bin/bash
+set -u -e -E -C -o pipefail
+
+if [[ $(id -u) != 0 ]]; then
+    echo "You are not root. You might need root access from here on."
+    echo "Consider running this script with 'sudo'."
+fi
+
+DNSMASQ_D=/etc/dnsmasq.d
+DNSMASQ_CONF=/etc/dnsmasq.conf
+
+if ! service dnsmasq status 2> /dev/null; then
+    apt-get install dnsmasq
+fi
+if ! grep "^conf-dir=$DNSMASQ_D" $DNSMASQ_CONF; then
+    echo "conf-dir=$DNSMASQ_D" >> $DNSMASQ_CONF
+fi
+if [[ ! -d $DNSMASQ_D ]]; then
+    mkdir -p $DNSMASQ_D
+fi
+if [[ ! -w $DNSMASQ_D ]]; then
+    chgrp docker $DNSMASQ_D
+    chmod g+s $DNSMASQ_D
+fi
