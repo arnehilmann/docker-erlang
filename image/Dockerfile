@@ -15,16 +15,18 @@ RUN apt-get install -y libssl1.0.0
 #RUN apt-get install -y libwxgtk2.8-0
 
 RUN apt-get install -y make
-RUN apt-get install --reinstall openssh-server
+RUN apt-get install -y --reinstall openssh-server
 RUN ssh-keygen -q -t rsa -f /root/.ssh/id_rsa -N ""
 RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 RUN echo "root:root" | chpasswd
+RUN apt-get install -y host
 
 # Install package and add to PATH
 ADD erlang-17.1.tar.gz /
 RUN ln -s erlang-17.1 /opt/erlang
-ENV PATH /opt/erlang/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RUN ln -s /opt/erlang/bin/* /usr/local/bin/
 
+#ENV PATH /opt/erlang/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ## Run a shell by default
 #CMD ["/bin/bash"]
 
