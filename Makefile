@@ -7,7 +7,7 @@ PREFIX = erlang-17.1
 
 .PHONY: all build image clean
 
-all: image
+all: latest
 
 build: image/$(PREFIX).tar.gz
 
@@ -20,7 +20,7 @@ image/$(PREFIX).tar.gz:
 image: image/$(PREFIX).tar.gz
 	docker build -t "$(IMG)" image
 
-latest:	all
+latest:	image
 	docker tag "$(IMG)" "$(IMG_LATEST)"
 
 clean:
