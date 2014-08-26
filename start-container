@@ -20,13 +20,19 @@ if docker inspect $NAME > /dev/null 2>&1; then
     echo "housekeeping finished"
 fi
 
+if [[ -x ./init ]]; then
+    CMD=./init
+else
+    CMD=
+fi
+
 DOCKER_ID=$(docker run -d \
     -v $(pwd):/host-wd \
     -w /host-wd \
     -h $NAME \
     --name=$NAME \
     arne/erlang \
-    ./init)
+    $CMD)
 
 IP=$(docker inspect $DOCKER_ID | sed -n '/"IPAddress"/{s/.*": "//;s/".*//;p}')
 
