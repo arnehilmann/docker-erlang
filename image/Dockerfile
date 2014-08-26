@@ -21,6 +21,7 @@ RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 RUN echo "root:root" | chpasswd
 RUN apt-get install -y host
 RUN apt-get install -y git
+RUN apt-get install -y wget
 
 # Install package and add to PATH
 ADD erlang-17.1.tar.gz /
