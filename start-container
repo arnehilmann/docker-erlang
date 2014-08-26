@@ -44,6 +44,11 @@ for OLD_IP in $(grep -l $IP $DNSMASQ_D/*); do
 done
 
 echo "address=/$NAME/$IP" >  $DNSMASQ_D/$NAME
-echo "remember to restart the dnsmasq service after all containers are started."
-echo "'sudo service dnsmasq restart' would do the trick."
+ssh-keygen -f "$HOME/.ssh/known_hosts" -R $NAME
+
+#echo "remember to restart the dnsmasq service after all containers are started."
+#echo "'sudo service dnsmasq restart' would do the trick."
+sudo service dnsmasq restart
+
+
 echo "$NAME/$IP started"
