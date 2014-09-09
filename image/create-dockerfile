@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $(dirname $0)
+sed "s/\$USERID/$(id -u)/g;s/\$USER/$USER/g" Dockerfile.in > Dockerfile

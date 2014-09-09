@@ -1,4 +1,8 @@
-FROM stoo/baseimage:0.9.12
+FROM stoo/erlang
+
+#RUN ln -s erlang-17.1 /opt/erlang
+#RUN ln -s /opt/erlang/bin/* /usr/local/bin/
+
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -23,14 +27,14 @@ RUN apt-get install -y host
 RUN apt-get install -y git
 RUN apt-get install -y wget
 
-# Install package and add to PATH
-ADD erlang-17.1.tar.gz /
-RUN ln -s erlang-17.1 /opt/erlang
-RUN ln -s /opt/erlang/bin/* /usr/local/bin/
-
-#ENV PATH /opt/erlang/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-## Run a shell by default
-#CMD ["/bin/bash"]
+#RUN groupadd -r users -g 433
+RUN mkdir -p /home/$USER
+RUN useradd -u $USERID -r -g users -d /home/$USER -s /bin/bash -c "Docker image user" $USER
+RUN chown -R $USER:users /home/$USER
+RUN mkdir -p /home/$USER/.ssh
+RUN ssh-keygen -q -t rsa -f /home/$USER/.ssh/id_rsa -N ""
+RUN cp /home/$USER/.ssh/id_rsa.pub /home/$USER/.ssh/authorized_keys
+RUN echo "$USER:$USER" | chpasswd
 
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
