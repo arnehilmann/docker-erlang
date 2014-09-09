@@ -14,7 +14,7 @@ latest:	image
 image: image/Dockerfile
 	docker build -t "$(IMG)" image
 
-image/Dockerfile:
+image/Dockerfile: image/*
 	image/create-dockerfile
 
 clean:

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+mkdir -p /host-wd/logs
+exec 1> /host-wd/logs/$HOSTNAME.log 2>&1
+
+USER=$1 && shift
+
+if [[ -x /host-wd/init-container ]]; then
+    echo "running custom init-container script"
+    su $USER -c /host-wd/init-container
+fi
+
+echo "starting ssh daemon in foreground"
+/usr/sbin/sshd -D
