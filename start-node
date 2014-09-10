@@ -29,8 +29,8 @@ else
 fi
 
 DOCKER_ID=$(docker run -d \
-    -v $(pwd):/host-wd \
-    -w /host-wd \
+    -v $(pwd):/docker \
+    -w /docker \
     -h $NAME \
     --name=$NAME \
     arne/erlang \
