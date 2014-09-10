@@ -1,13 +1,18 @@
 #!/bin/bash
 
-mkdir -p /host-wd/logs
-exec 1> /host-wd/logs/$HOSTNAME.log 2>&1
+export HOST_DIR="/docker"
+export LOG_DIR="$HOST_DIR/logs"
+
+su $USER -c "mkdir -p \"$LOG_DIR\""
+exec 1> "$LOG_DIR/$HOSTNAME.log" 2>&1
 
 USER=$1 && shift
 
-if [[ -x /host-wd/init-container ]]; then
-    echo "running custom init-container script"
-    su $USER -c /host-wd/init-container
+INIT_APPLICATION_SCRIPT="$HOST_DIR/init-application"
+
+if [[ -x "$INIT_APPLICATION_SCRIPT" ]]; then
+    echo "running $INIT_APPLICATION_SCRIPT"
+    su $USER -c "$INIT_APPLICATION_SCRIPT"
 fi
 
 echo "starting ssh daemon in foreground"
