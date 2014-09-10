@@ -36,7 +36,7 @@ DOCKER_ID=$(docker run -d \
     arne/erlang \
     $CMD)
 
-IP=$(docker inspect $DOCKER_ID | sed -n '/"IPAddress"/{s/.*": "//;s/".*//;p}')
+IP=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' $DOCKER_ID)
 
 for OLD_NAME in $(grep -l $NAME $DNSMASQ_D/*); do
     rm -fv $OLD_NAME
@@ -46,7 +46,7 @@ for OLD_IP in $(grep -l $IP $DNSMASQ_D/*); do
 done
 
 echo "address=/$NAME/$IP" >  $DNSMASQ_D/$NAME
-ssh-keygen -f "$HOME/.ssh/known_hosts" -R $NAME
+#ssh-keygen -f "$HOME/.ssh/known_hosts" -R $NAME
 
 if [[ -x /usr/bin/systemctl ]]; then
     sudo systemctl restart dnsmasq
