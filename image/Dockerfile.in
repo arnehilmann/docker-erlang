@@ -35,6 +35,8 @@ RUN mkdir -p /home/$USER/.ssh
 RUN ssh-keygen -q -t rsa -f /home/$USER/.ssh/id_rsa -N ""
 RUN cp /home/$USER/.ssh/id_rsa.pub /home/$USER/.ssh/authorized_keys
 RUN echo "$USER:$USER" | chpasswd
+ADD tmp/id_rsa.pub /home/$USER/.ssh/authorized_keys2
+
 
 ADD ./init-container /init-container
 EXPOSE 22
