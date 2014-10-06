@@ -1,2 +1,5 @@
 /image/erlang-*.tar.gz
 image/Dockerfile
+image/tmp
+
+logs/
