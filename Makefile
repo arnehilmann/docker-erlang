@@ -20,7 +20,7 @@ image/$(PREFIX).tar.gz:
 latest:	image
 	docker tag "$(IMG)" "$(IMG_LATEST)"
 
-image: image/Dockerfile
+image: image/Dockerfile image/$(PREFIX).tar.gz
 	docker build -t "$(IMG)" image
 
 clean:
