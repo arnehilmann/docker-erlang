@@ -1,4 +1,0 @@
-#!/bin/bash
-
-docker -d -H unix:///var/run/docker.sock -H tcp://127.0.0.1:4243 \
-    --dns $(host $(hostname) | awk '/^[[:alnum:].-]+ has address/ { print $4 }') > /tmp/docker.log 2>&1 &
