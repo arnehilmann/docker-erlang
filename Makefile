@@ -1,5 +1,5 @@
 VSN = 17.3
-BUILD=$(VSN)-2
+BUILD=$(VSN)-4
 IMG = arne/erlang:$(BUILD)
 IMG_LATEST = arne/erlang:latest
 IMG_BUILD = arne/erlang_build:$(BUILD)
